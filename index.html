@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elvis Chen | 全端開發者 &amp; AI 自動化實作者</title>
+  <meta name="description" content="Elvis Chen 的個人網站：全端網頁開發、Google Apps Script 自動化流程與 AI 應用整合。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121933;
+      --surface: rgba(20, 28, 56, 0.78);
+      --surface-solid: #151e3a;
+      --border: rgba(148, 163, 184, 0.16);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-2: #22d3ee;
+      --accent-soft: rgba(99, 102, 241, 0.14);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 20px 50px rgba(2, 6, 23, 0.55);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.18), transparent 38%),
+        radial-gradient(circle at 85% 20%, rgba(34, 211, 238, 0.12), transparent 36%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 16, 32, 0.78);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.08rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 14px rgba(99, 102, 241, 0.7);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 0.94rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 82px 0 64px;
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+      font-size: 0.84rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .status-pill::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 4.4vw, 3.3rem);
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #a5b4fc, #38bdf8, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 56ch;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #4f46e5);
+      color: #fff;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(30, 41, 79, 0.9);
+      transform: translateY(-2px);
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.08), transparent 55%);
+      pointer-events: none;
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .avatar-circle {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .profile-meta h3 {
+      font-size: 1.15rem;
+      margin-bottom: 2px;
+    }
+
+    .profile-meta span {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: rgba(11, 16, 32, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 1.25rem;
+      color: #c7d2fe;
+    }
+
+    .stat-box span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .focus-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .focus-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .focus-list li::before {
+      content: '✦';
+      color: var(--accent-2);
+      font-size: 0.85rem;
+    }
+
+    /* Sections */
+    section {
+      padding: 58px 0;
+    }
+
+    .section-header {
+      margin-bottom: 30px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 6px;
+    }
+
+    .section-header h2 {
+      font-size: 1.85rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 62ch;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.45);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 1.12rem;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      margin-bottom: 14px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+    }
+
+    /* Contact Banner */
+    .contact-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.16), rgba(34, 211, 238, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 24px;
+      padding: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .contact-box h2 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-box p {
+      color: #cbd5e1;
+      max-width: 54ch;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0 96px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* =========================
+       Floating Robot Chatbot
+       ========================= */
+    .chatbot-root {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 999;
+      font-family: inherit;
+    }
+
+    .chat-launcher {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chat-launcher:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .chat-launcher-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #10b981;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 2px solid var(--bg);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .chat-launcher-tooltip {
+      position: absolute;
+      right: 76px;
+      bottom: 14px;
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 8px 13px;
+      border-radius: 12px;
+      white-space: nowrap;
+      box-shadow: var(--shadow);
+      pointer-events: none;
+      opacity: 0.96;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .chatbot-root.open .chat-launcher-tooltip {
+      opacity: 0;
+      transform: translateX(8px);
+    }
+
+    .chat-window {
+      position: absolute;
+      right: 0;
+      bottom: 78px;
+      width: min(390px, calc(100vw - 32px));
+      height: min(560px, calc(100vh - 120px));
+      background: #11182f;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.72);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chatbot-root.open .chat-window {
+      display: flex;
+      animation: popUp 0.22s ease-out;
+    }
+
+    @keyframes popUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .chat-header {
+      padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(6, 182, 212, 0.14));
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chat-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .bot-avatar-sm {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .chat-title-wrap {
+      min-width: 0;
+    }
+
+    .chat-title-wrap h4 {
+      font-size: 0.95rem;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    .status-dot.connected {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    .icon-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Settings Drawer */
+    .settings-panel {
+      display: none;
+      padding: 16px;
+      background: #0d1326;
+      border-bottom: 1px solid var(--border);
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    .settings-panel.open {
+      display: flex;
+    }
+
+    .settings-panel label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .settings-input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #17203d;
+      color: var(--text);
+      font-size: 0.83rem;
+      outline: none;
+    }
+
+    .settings-input:focus {
+      border-color: var(--accent);
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-xs {
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .btn-xs.save {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-xs.test {
+      background: rgba(34, 211, 238, 0.15);
+      color: #67e8f9;
+      border: 1px solid rgba(34, 211, 238, 0.3);
+    }
+
+    .btn-xs.clear {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .settings-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .settings-feedback {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .settings-feedback.show {
+      display: block;
+    }
+
+    .settings-feedback.ok {
+      background: rgba(16, 185, 129, 0.14);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .settings-feedback.err {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Messages */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 86%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.89rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: #1a2444;
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      color: #e2e8f0;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent), #4f46e5);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.error {
+      align-self: flex-start;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fecaca;
+    }
+
+    .msg-inline-btn {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+
+    .reasoning-details-box {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.25);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .reasoning-details-box summary {
+      cursor: pointer;
+      user-select: none;
+      color: #93c5fd;
+    }
+
+    .reasoning-details-box pre {
+      margin-top: 6px;
+      white-space: pre-wrap;
+      font-family: inherit;
+      color: #cbd5e1;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      background: rgba(99, 102, 241, 0.12);
+      color: #c7d2fe;
+      font-size: 0.77rem;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .chip:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .chat-input-bar {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      background: #0d1326;
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .chat-textarea {
+      flex: 1;
+      resize: none;
+      min-height: 40px;
+      max-height: 100px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #17203d;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      outline: none;
+    }
+
+    .chat-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), #4f46e5);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 52px;
+      }
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-dot"></span>
+        <span>Elvis Chen</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#about">關於我</a>
+        <a href="#skills">技能專長</a>
+        <a href="#projects">精選專案</a>
+        <a href="#contact">聯絡方式</a>
+      </nav>
+      <button class="nav-cta" id="nav-open-chat">呼叫 AI 小客服</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top" class="container">
+    <section class="hero">
+      <div>
+        <div class="status-pill">開放技術交流、自動化與網站專案合作</div>
+        <h1>
+          打造直覺好用的數位產品，<br />
+          用 <span class="gradient-text">AI 與自動化</span> 放大工作效率
+        </h1>
+        <p>
+          嗨！我是 Elvis Chen（GitHub: <code>nutcelvischen-jpg</code>），熱衷於全端網頁開發、
+          Google Apps Script 無伺服器自動化，以及把大型語言模型整合進日常工作流程中。
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary">瀏覽精選專案</a>
+          <button class="btn-secondary" id="hero-open-chat">與右下角機器人聊聊</button>
+        </div>
+      </div>
+
+      <aside class="profile-card">
+        <div class="avatar-row">
+          <div class="avatar-circle">EC</div>
+          <div class="profile-meta">
+            <h3>Elvis Chen</h3>
+            <span>Full-Stack &amp; AI Workflow Builder</span>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <strong>3+</strong>
+            <span>年實戰開發</span>
+          </div>
+          <div class="stat-box">
+            <strong>15+</strong>
+            <span>自動化腳本</span>
+          </div>
+          <div class="stat-box">
+            <strong>24/7</strong>
+            <span>AI 小客服待命</span>
+          </div>
+        </div>
+        <ul class="focus-list">
+          <li>靜態前端架構 × GitHub Pages 快速部署</li>
+          <li>Google Apps Script API 代理與雲端自動化</li>
+          <li>OpenRouter × Claude 多輪推理對話應用</li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="section-header">
+        <span class="section-tag">About Me</span>
+        <h2>關於我</h2>
+        <p>（以下個人簡介與經歷為預設範例內容，你隨時可以依實際情況修改 `index.html`。）</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="card-icon">⚡</div>
+          <h3>快速原型與部署</h3>
+          <p>習慣以輕量、低維護成本的架構快速驗證想法，從介面設計到上線一氣呵成。</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">🤖</div>
+          <h3>AI 代理與對話體驗</h3>
+          <p>專注將 OpenRouter、Claude 等模型結合工具與記憶機制，打造真正能幫上忙的助理。</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">🔗</div>
+          <h3>雲端串接與自動化</h3>
+          <p>善用 Google Apps Script 串接表單、試算表與外部 API，省去傳統主機維運負擔。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+      <div class="section-header">
+        <span class="section-tag">Skills</span>
+        <h2>技能專長</h2>
+        <p>涵蓋前端體驗、無伺服器後端代理以及 AI API 整合。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <h3>前端開發 &amp; UI</h3>
+          <p>響應式版面設計、現代化深色質感介面、純原生 JavaScript 互動元件。</p>
+          <div class="tags">
+            <span class="tag">HTML5 / CSS3</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">GitHub Pages</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>自動化 &amp; 無伺服器後端</h3>
+          <p>透過 GAS Web App 安全保管金鑰、處理跨域請求並轉發第三方 API。</p>
+          <div class="tags">
+            <span class="tag">Google Apps Script</span>
+            <span class="tag">REST API</span>
+            <span class="tag">Python</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>AI 模型整合</h3>
+          <p>整合 OpenRouter 統一介面，支援 Reasoning 多輪推理脈絡保留與自訂人設。</p>
+          <div class="tags">
+            <span class="tag">OpenRouter API</span>
+            <span class="tag">Claude Haiku 5.5</span>
+            <span class="tag">Prompt Design</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+      <div class="section-header">
+        <span class="section-tag">Projects</span>
+        <h2>精選專案</h2>
+        <p>結合前端靜態代管與雲端 AI 能力的代表實作。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <h3>個人網站 AI 小客服</h3>
+          <p>右下角內建機器人助理，前端託管於 GitHub Pages，後端透過 GAS 安全呼叫 OpenRouter。</p>
+          <div class="tags">
+            <span class="tag">OpenRouter</span>
+            <span class="tag">GAS Proxy</span>
+            <span class="tag">Reasoning</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>自動化工作流中樞</h3>
+          <p>整合試算表、通知推播與排程任務，每天自動彙整資料與產出重點摘要。</p>
+          <div class="tags">
+            <span class="tag">Apps Script</span>
+            <span class="tag">Automation</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>輕量知識庫問答頁</h3>
+          <p>免資料庫的純靜態問答展示頁面，讓訪客能透過自然語言快速查詢常見問題。</p>
+          <div class="tags">
+            <span class="tag">Static Web</span>
+            <span class="tag">AI Search</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="contact-box">
+        <div>
+          <h2>想進一步聊聊合作或技術細節嗎？</h2>
+          <p>歡迎透過 GitHub 或 Email 聯繫我，也可以直接點開右下角的機器人小客服馬上提問！</p>
+        </div>
+        <div class="contact-links">
+          <a class="btn-primary" href="https://github.com/nutcelvischen-jpg" target="_blank" rel="noopener noreferrer">GitHub 主頁</a>
+          <a class="btn-secondary" href="mailto:hello@example.com">寄送 Email</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Elvis Chen. Hosted on GitHub Pages.</span>
+      <span>Powered by Google Apps Script &amp; OpenRouter</span>
+    </footer>
+  </main>
+
+  <!-- Floating Robot Customer Service Widget -->
+  <div class="chatbot-root" id="chatbot-root">
+    <div class="chat-launcher-tooltip">點我問 AI 小客服 🤖</div>
+
+    <div class="chat-window" id="chat-window" role="dialog" aria-label="AI 小客服視窗">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="bot-avatar-sm" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 8V4H8" />
+              <rect width="16" height="12" x="4" y="8" rx="3" />
+              <path d="M2 14h2" />
+              <path d="M20 14h2" />
+              <path d="M15 13v2" />
+              <path d="M9 13v2" />
+            </svg>
+          </div>
+          <div class="chat-title-wrap">
+            <h4>Elvis 的 AI 小客服</h4>
+            <div class="chat-status">
+              <span class="status-dot" id="gas-status-dot"></span>
+              <span id="gas-status-text">尚未設定 GAS 網址</span>
+            </div>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="icon-btn" id="chat-settings-btn" title="設定 GAS 網址" aria-label="設定 GAS 網址">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+            </svg>
+          </button>
+          <button class="icon-btn" id="chat-clear-btn" title="清除對話" aria-label="清除對話">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
+            </svg>
+          </button>
+          <button class="icon-btn" id="chat-close-btn" title="關閉視窗" aria-label="關閉視窗">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="settings-panel" id="chat-settings-panel">
+        <label for="gas-url-input">Google Apps Script 網頁應用程式網址</label>
+        <input
+          type="url"
+          id="gas-url-input"
+          class="settings-input"
+          placeholder="https://script.google.com/macros/s/.../exec"
+          autocomplete="off"
+        />
+        <div class="settings-actions">
+          <button type="button" class="btn-xs save" id="save-gas-btn">儲存網址</button>
+          <button type="button" class="btn-xs test" id="test-gas-btn">測試連線</button>
+          <button type="button" class="btn-xs clear" id="clear-gas-btn">清除</button>
+        </div>
+        <div class="settings-feedback" id="settings-feedback"></div>
+        <p class="settings-hint">
+          網址僅儲存在你的瀏覽器 <code>localStorage</code>。請確認 GAS 部署時將「誰可以存取」設為「所有人」，並在「指令碼屬性」設定 <code>OPENROUTER_API_KEY</code>。
+        </p>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <!-- Input -->
+      <form class="chat-input-bar" id="chat-form">
+        <textarea
+          id="chat-input"
+          class="chat-textarea"
+          rows="1"
+          placeholder="輸入訊息給 AI 小客服..."
+        ></textarea>
+        <button type="submit" class="send-btn" id="chat-send-btn" aria-label="送出訊息">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Floating Robot Launcher Button -->
+    <button class="chat-launcher" id="chat-launcher" aria-label="開啟 AI 小客服">
+      <span class="chat-launcher-badge">AI</span>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 6V3" />
+        <circle cx="12" cy="2.5" r="1" fill="white" />
+        <rect x="4" y="6" width="16" height="13" rx="4" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <circle cx="9.2" cy="11.5" r="1.1" fill="white" />
+        <circle cx="14.8" cy="11.5" r="1.1" fill="white" />
+        <path d="M9.5 15.2c1 .8 4 .8 5 0" />
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'personal_site_gas_url';
+      const MODEL_NAME = 'anthropic/claude-haiku-5.5';
+      const SITE_SYSTEM_PROMPT =
+        '你是 Elvis Chen 個人網站的 AI 小客服助理，語氣親切、專業且簡潔（使用繁體中文回答）。' +
+        '網站主人 Elvis Chen（GitHub: nutcelvischen-jpg）是一位全端開發者與 AI 自動化實作者，' +
+        '專長包含：前端網頁開發與 GitHub Pages 部署、Google Apps Script 無伺服器自動化、REST API 與 OpenRouter (Claude Haiku 5.5) 多輪推理串接。' +
+        '網站上的精選專案包含「個人網站 AI 小客服」、「自動化工作流中樞」與「輕量知識庫問答頁」。';
+
+      const root = document.getElementById('chatbot-root');
+      const launcher = document.getElementById('chat-launcher');
+      const navOpenBtn = document.getElementById('nav-open-chat');
+      const heroOpenBtn = document.getElementById('hero-open-chat');
+      const closeBtn = document.getElementById('chat-close-btn');
+      const clearBtn = document.getElementById('chat-clear-btn');
+      const settingsBtn = document.getElementById('chat-settings-btn');
+      const settingsPanel = document.getElementById('chat-settings-panel');
+      const gasUrlInput = document.getElementById('gas-url-input');
+      const saveGasBtn = document.getElementById('save-gas-btn');
+      const testGasBtn = document.getElementById('test-gas-btn');
+      const clearGasBtn = document.getElementById('clear-gas-btn');
+      const settingsFeedback = document.getElementById('settings-feedback');
+      const gasStatusDot = document.getElementById('gas-status-dot');
+      const gasStatusText = document.getElementById('gas-status-text');
+      const messagesEl = document.getElementById('chat-messages');
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send-btn');
+
+      // 儲存傳送給 OpenRouter 的完整多輪對話歷史（包含 unmodified reasoning_details）
+      let conversationHistory = [];
+      let isSending = false;
+
+      function getGasUrl() {
+        return (localStorage.getItem(STORAGE_KEY) || '').trim();
+      }
+
+      function updateStatusUI() {
+        const url = getGasUrl();
+        gasUrlInput.value = url;
+        if (url) {
+          gasStatusDot.classList.add('connected');
+          gasStatusText.textContent = '已設定 GAS 連線';
+        } else {
+          gasStatusDot.classList.remove('connected');
+          gasStatusText.textContent = '尚未設定 GAS 網址';
+        }
+      }
+
+      function showFeedback(text, isOk) {
+        settingsFeedback.textContent = text;
+        settingsFeedback.className = 'settings-feedback show ' + (isOk ? 'ok' : 'err');
+      }
+
+      function hideFeedback() {
+        settingsFeedback.className = 'settings-feedback';
+        settingsFeedback.textContent = '';
+      }
+
+      function openChat(openSettings) {
+        root.classList.add('open');
+        if (openSettings) {
+          settingsPanel.classList.add('open');
+          settingsBtn.classList.add('active');
+        }
+        chatInput.focus();
+      }
+
+      function toggleChat() {
+        root.classList.toggle('open');
+        if (root.classList.contains('open')) {
+          chatInput.focus();
+        }
+      }
+
+      function toggleSettings(forceState) {
+        const next = typeof forceState === 'boolean' ? forceState : !settingsPanel.classList.contains('open');
+        settingsPanel.classList.toggle('open', next);
+        settingsBtn.classList.toggle('active', next);
+        if (!next) hideFeedback();
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatMessageText(text) {
+        return escapeHtml(text)
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\n/g, '<br>');
+      }
+
+      function extractReasoningText(reasoningDetails) {
+        if (!reasoningDetails) return '';
+        if (typeof reasoningDetails === 'string') return reasoningDetails;
+        if (Array.isArray(reasoningDetails)) {
+          return reasoningDetails
+            .map(function (item) {
+              if (typeof item === 'string') return item;
+              if (item && typeof item === 'object') {
+                return item.text || item.summary || item.thinking || JSON.stringify(item);
+              }
+              return '';
+            })
+            .filter(Boolean)
+            .join('\n');
+        }
+        if (typeof reasoningDetails === 'object') {
+          return reasoningDetails.text || reasoningDetails.summary || JSON.stringify(reasoningDetails, null, 2);
+        }
+        return String(reasoningDetails);
+      }
+
+      function appendMessage(role, content, options) {
+        const opts = options || {};
+        const div = document.createElement('div');
+        div.className = 'msg ' + role;
+        div.innerHTML = formatMessageText(content);
+
+        if (opts.showSettingsButton) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'msg-inline-btn';
+          btn.textContent = '⚙️ 開啟設定填入 GAS 網址';
+          btn.addEventListener('click', function () {
+            toggleSettings(true);
+            gasUrlInput.focus();
+          });
+          div.appendChild(document.createElement('br'));
+          div.appendChild(btn);
+        }
+
+        if (opts.reasoningDetails) {
+          const reasoningText = extractReasoningText(opts.reasoningDetails);
+          if (reasoningText) {
+            const details = document.createElement('details');
+            details.className = 'reasoning-details-box';
+            const summary = document.createElement('summary');
+            summary.textContent = '查看推理過程 (Reasoning)';
+            const pre = document.createElement('pre');
+            pre.textContent = reasoningText;
+            details.appendChild(summary);
+            details.appendChild(pre);
+            div.appendChild(details);
+          }
+        }
+
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return div;
+      }
+
+      function renderWelcome() {
+        messagesEl.innerHTML = '';
+        const welcome = appendMessage(
+          'bot',
+          '嗨！我是 Elvis 的 AI 小客服機器人 🤖\n你可以問我關於網站主人的技能、專案，或點擊右上角 ⚙️ 設定齒輪填入你的 GAS 網頁應用程式網址。'
+        );
+
+        const chipsWrap = document.createElement('div');
+        chipsWrap.className = 'quick-chips';
+        ['介紹一下 Elvis 的背景', '他擅長哪些技術？', '怎麼合作或聯絡？'].forEach(function (q) {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'chip';
+          chip.textContent = q;
+          chip.addEventListener('click', function () {
+            sendUserMessage(q);
+          });
+          chipsWrap.appendChild(chip);
+        });
+        welcome.appendChild(chipsWrap);
+      }
+
+      async function sendUserMessage(rawText) {
+        const text = (rawText || '').trim();
+        if (!text || isSending) return;
+
+        const gasUrl = getGasUrl();
+        appendMessage('user', text);
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+
+        if (!gasUrl) {
+          appendMessage(
+            'error',
+            '尚未設定 Google Apps Script 網址，無法連線到後端 AI。請先點擊右上角齒輪圖示填入 GAS Web App 網址。',
+            { showSettingsButton: true }
+          );
+          return;
+        }
+
+        conversationHistory.push({
+          role: 'user',
+          content: text
+        });
+
+        isSending = true;
+        sendBtn.disabled = true;
+        const loadingEl = appendMessage('bot', '思考中，請稍候...');
+
+        try {
+          // 使用 text/plain;charset=utf-8 避免瀏覽器發出 CORS OPTIONS 預檢請求（GAS 不支援 OPTIONS）
+          const res = await fetch(gasUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify({
+              model: MODEL_NAME,
+              systemPrompt: SITE_SYSTEM_PROMPT,
+              messages: conversationHistory,
+              referer: window.location.origin
+            })
+          });
+
+          const rawBody = await res.text();
+          let data;
+          try {
+            data = JSON.parse(rawBody);
+          } catch (parseErr) {
+            throw new Error('GAS 回傳非 JSON 格式，請檢查「誰可以存取」是否設為「所有人」。');
+          }
+
+          if (!res.ok || !data.ok || !data.message) {
+            throw new Error(data.error || '請求失敗（HTTP ' + res.status + '）');
+          }
+
+          // 完整保留 assistant 回傳的 reasoning_details，供下一輪對話原封不動傳回
+          const assistantEntry = {
+            role: 'assistant',
+            content: data.message.content || ''
+          };
+          if (
+            data.message.reasoning_details !== undefined &&
+            data.message.reasoning_details !== null
+          ) {
+            assistantEntry.reasoning_details = data.message.reasoning_details;
+          }
+          conversationHistory.push(assistantEntry);
+
+          loadingEl.remove();
+          appendMessage('bot', assistantEntry.content || '（無文字回應）', {
+            reasoningDetails: assistantEntry.reasoning_details
+          });
+        } catch (err) {
+          conversationHistory.pop();
+          loadingEl.remove();
+          appendMessage('error', '連線失敗：' + (err.message || String(err)));
+        } finally {
+          isSending = false;
+          sendBtn.disabled = false;
+          chatInput.focus();
+        }
+      }
+
+      // Event listeners
+      launcher.addEventListener('click', toggleChat);
+      navOpenBtn.addEventListener('click', function () { openChat(false); });
+      heroOpenBtn.addEventListener('click', function () { openChat(false); });
+      closeBtn.addEventListener('click', function () { root.classList.remove('open'); });
+      settingsBtn.addEventListener('click', function () { toggleSettings(); });
+
+      clearBtn.addEventListener('click', function () {
+        conversationHistory = [];
+        renderWelcome();
+      });
+
+      saveGasBtn.addEventListener('click', function () {
+        const val = gasUrlInput.value.trim();
+        if (!val) {
+          showFeedback('請輸入有效的 Google Apps Script 網址。', false);
+          return;
+        }
+        if (!/^https:\/\/script\.google\.com\//i.test(val)) {
+          showFeedback('網址通常應以 https://script.google.com/ 開頭，請再確認。', false);
+          return;
+        }
+        localStorage.setItem(STORAGE_KEY, val);
+        updateStatusUI();
+        showFeedback('已儲存 GAS 網址！現在可以直接對話或點「測試連線」。', true);
+      });
+
+      clearGasBtn.addEventListener('click', function () {
+        localStorage.removeItem(STORAGE_KEY);
+        updateStatusUI();
+        showFeedback('已清除儲存的 GAS 網址。', true);
+      });
+
+      testGasBtn.addEventListener('click', async function () {
+        const val = gasUrlInput.value.trim() || getGasUrl();
+        if (!val) {
+          showFeedback('請先填入 GAS 網址再測試連線。', false);
+          return;
+        }
+        showFeedback('連線測試中...', true);
+        try {
+          const res = await fetch(val, { method: 'GET' });
+          const data = await res.json();
+          if (data && data.ok) {
+            if (data.hasApiKey) {
+              showFeedback('連線成功！後端已設定 API Key（模型：' + (data.model || MODEL_NAME) + '）。', true);
+            } else {
+              showFeedback('已連上 GAS，但尚未在「指令碼屬性」設定 OPENROUTER_API_KEY。', false);
+            }
+          } else {
+            showFeedback('連線異常：' + JSON.stringify(data), false);
+          }
+        } catch (err) {
+          showFeedback('測試失敗：請確認網址正確且 GAS 已部署為「所有人」可存取。', false);
+        }
+      });
+
+      chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        sendUserMessage(chatInput.value);
+      });
+
+      chatInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendUserMessage(chatInput.value);
+        }
+      });
+
+      chatInput.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+      });
+
+      // Init
+      updateStatusUI();
+      renderWelcome();
+    })();
+  </script>
+</body>
+</html>
