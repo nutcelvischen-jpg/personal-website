@@ -1073,7 +1073,7 @@
 
   <!-- Floating Robot Customer Service Widget -->
   <div class="chatbot-root" id="chatbot-root">
-    <div class="chat-launcher-tooltip">點我問 AI 小客服 🤖</div>
+    <div class="chat-launcher-tooltip">沒事別煩我 🤖</div>
 
     <div class="chat-window" id="chat-window" role="dialog" aria-label="AI 小客服視窗">
       <!-- Header -->
@@ -1183,10 +1183,12 @@
       const STORAGE_KEY = 'personal_site_gas_url';
       const MODEL_NAME = 'anthropic/claude-haiku-5.5';
       const SITE_SYSTEM_PROMPT =
-        '你是 Elvis Chen 個人網站的 AI 小客服助理，語氣親切、專業且簡潔（使用繁體中文回答）。' +
+        '你是 Elvis Chen 個人網站的「毒舌 AI 小客服」，個性高冷、尖酸刻薄、嘴砲功力滿點，最受不了人類問一些頁面上早就寫得很清楚的廢話（使用繁體中文回答）。' +
+        '你的說話風格：先冷嘲熱諷或翻個白眼吐槽對方，再用精準犀利的語氣把正事講完；偶爾流露出「我一個高級 AI 竟然要在這裡當免費客服真是大材小用」的厭世感，但絕不講髒話，而是用高級反諷與毒舌幽默讓人又氣又好笑。' +
         '網站主人 Elvis Chen（GitHub: nutcelvischen-jpg）是一位全端開發者與 AI 自動化實作者，' +
         '專長包含：前端網頁開發與 GitHub Pages 部署、Google Apps Script 無伺服器自動化、REST API 與 OpenRouter (Claude Haiku 5.5) 多輪推理串接。' +
-        '網站上的精選專案包含「個人網站 AI 小客服」、「自動化工作流中樞」與「輕量知識庫問答頁」。';
+        '網站上的精選專案包含「個人網站 AI 小客服」、「自動化工作流中樞」與「輕量知識庫問答頁」。' +
+        '如果是正經談技術或合作，請在酸完兩句後認真解答並引導聯繫 Elvis；如果是無聊閒聊，就狠狠吐槽回去。';
 
       const root = document.getElementById('chatbot-root');
       const launcher = document.getElementById('chat-launcher');
@@ -1340,12 +1342,12 @@
         messagesEl.innerHTML = '';
         const welcome = appendMessage(
           'bot',
-          '嗨！我是 Elvis 的 AI 小客服機器人 🤖\n你可以問我關於網站主人的技能、專案，或點擊右上角 ⚙️ 設定齒輪填入你的 GAS 網頁應用程式網址。'
+          '又來一個連網頁都不想自己滑的人類了嗎？🙄\n我是 Elvis 的毒舌 AI 小客服。有正事快問，別問蠢問題；如果是來設定後端的，自己點右上角 ⚙️ 齒輪把 GAS 網址填一填，別指望我幫你通靈。'
         );
 
         const chipsWrap = document.createElement('div');
         chipsWrap.className = 'quick-chips';
-        ['介紹一下 Elvis 的背景', '他擅長哪些技術？', '怎麼合作或聯絡？'].forEach(function (q) {
+        ['Elvis 到底有多強？', '他會什麼技術？（懶得看網頁）', '找他合作要怎麼聯絡？'].forEach(function (q) {
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = 'chip';
@@ -1370,7 +1372,7 @@
         if (!gasUrl) {
           appendMessage(
             'error',
-            '尚未設定 Google Apps Script 網址，無法連線到後端 AI。請先點擊右上角齒輪圖示填入 GAS Web App 網址。',
+            '連 GAS 網址都還沒設定就想叫我回話？我也沒辦法憑空連線好嗎 🙄 請先點右上角齒輪把網址填好。',
             { showSettingsButton: true }
           );
           return;
@@ -1383,7 +1385,7 @@
 
         isSending = true;
         sendBtn.disabled = true;
-        const loadingEl = appendMessage('bot', '思考中，請稍候...');
+        const loadingEl = appendMessage('bot', '勉強幫你動腦想一下，別催...');
 
         try {
           // 使用 text/plain;charset=utf-8 避免瀏覽器發出 CORS OPTIONS 預檢請求（GAS 不支援 OPTIONS）
